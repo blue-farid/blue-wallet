@@ -1,4 +1,4 @@
-package com.snapp.pay.insurance.bluewallet.api.v1.controller;
+package com.snapp.pay.insurance.bluewallet.api.v1;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
