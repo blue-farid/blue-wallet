@@ -1,6 +1,7 @@
 package com.snapp.pay.insurance.bluewallet.api.v1;
 
 import com.snapp.pay.insurance.bluewallet.api.v1.request.TransactionRequest;
+import com.snapp.pay.insurance.bluewallet.api.v1.response.TransactionResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -12,14 +13,13 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequiredArgsConstructor
 public class TransactionController {
-
     @GetMapping
     public ResponseEntity<Void> getTransactions() {
         return ResponseEntity.ok().build();
     }
 
     @PostMapping
-    public ResponseEntity<Void> transaction(TransactionRequest request) {
+    public ResponseEntity<TransactionResponse> transaction(TransactionRequest request) {
         return ResponseEntity.ok().build();
     }
 }
