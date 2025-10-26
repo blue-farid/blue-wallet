@@ -27,4 +27,12 @@ public class Wallet {
     private Date createdAt;
     @UpdateTimestamp
     private Date updatedAt;
+
+    public void decreaseBalance(BigDecimal balance) {
+        this.balance = this.balance.subtract(balance);
+    }
+
+    public void increaseBalance(BigDecimal balance) {
+        this.balance = this.balance.add(balance);
+    }
 }
