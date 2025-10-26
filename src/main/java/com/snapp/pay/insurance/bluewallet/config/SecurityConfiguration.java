@@ -1,20 +1,24 @@
 package com.snapp.pay.insurance.bluewallet.config;
 
+import com.snapp.pay.insurance.bluewallet.filter.AuthenticationFilter;
+import com.snapp.pay.insurance.bluewallet.util.JwtUtil;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 @Configuration
 @EnableMethodSecurity(securedEnabled = true)
 public class SecurityConfiguration {
     @Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-        return http.authorizeHttpRequests(auth ->
+    public SecurityFilterChain securityFilterChain(HttpSecurity http, JwtUtil jwtUtil) throws Exception {
+        return http.addFilterBefore(new AuthenticationFilter(jwtUtil), UsernamePasswordAuthenticationFilter.class)
+                .authorizeHttpRequests(auth ->
                         auth.requestMatchers("/auth/**").permitAll()
-                        .anyRequest().authenticated()
-            )
-            .build();
+                                .anyRequest().authenticated()
+                )
+                .build();
     }
 }

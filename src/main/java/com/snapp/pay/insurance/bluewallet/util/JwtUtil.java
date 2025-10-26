@@ -8,7 +8,6 @@ import io.jsonwebtoken.security.Keys;
 import org.springframework.stereotype.Component;
 
 import java.security.Key;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.Map;
 
@@ -59,8 +58,11 @@ public class JwtUtil {
                 .getBody();
     }
 
-    public String extractEmail(String token) {
+    public String extractMail(String token) {
         return extractAllClaims(token).getSubject();
+    }
+    public String[] extractRoles(String token) {
+        return (String[]) extractAllClaims(token).get("roles");
     }
 
     public Long extractCustomerId(String token) {
