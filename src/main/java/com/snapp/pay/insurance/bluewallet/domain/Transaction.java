@@ -1,0 +1,21 @@
+package com.snapp.pay.insurance.bluewallet.domain;
+
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
+import lombok.Data;
+
+import java.math.BigDecimal;
+
+//TODO is data dangerous?
+@Data
+@Table
+@Entity
+public class Transaction {
+    @Id
+    private Long id;
+    private Long fromWalletId;
+    private Long toWalletId;
+    private BigDecimal amount;
+    private TransactionStatus status;
+}
