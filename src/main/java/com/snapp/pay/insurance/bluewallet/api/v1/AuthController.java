@@ -2,7 +2,7 @@ package com.snapp.pay.insurance.bluewallet.api.v1;
 
 import com.snapp.pay.insurance.bluewallet.api.v1.request.LoginOrSignupRequest;
 import com.snapp.pay.insurance.bluewallet.api.v1.response.LoginOrSignupResponse;
-import com.snapp.pay.insurance.bluewallet.service.CustomerService;
+import com.snapp.pay.insurance.bluewallet.service.AuthenticationService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/auth")
 @RequiredArgsConstructor
 public class AuthController {
-    private final CustomerService customerService;
+    private final AuthenticationService customerService;
     //TODO handle otp with redis and mail
     @GetMapping("/otp")
     public ResponseEntity<Void> getOtp() {
