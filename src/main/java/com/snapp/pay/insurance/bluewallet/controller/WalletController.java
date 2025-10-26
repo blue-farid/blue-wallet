@@ -15,6 +15,7 @@ public class WalletController {
     public ResponseEntity<Void> getBalance() {
         return ResponseEntity.ok().build();
     }
+
     @PostMapping("/transactions")
     public ResponseEntity<Void> getTransactions() {
         return ResponseEntity.ok().build();
