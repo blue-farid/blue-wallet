@@ -21,14 +21,13 @@ public class JwtUtil {
         return Keys.hmacShaKeyFor(SECRET.getBytes());
     }
 
-    public String generateCustomerToken(Long customerId, String mail) {
+    public String generateCustomerToken(Long customerId, String mail, String... roles) {
         Date now = new Date();
         Date expiry = new Date(now.getTime() + EXPIRATION_MILLIS);
 
-        //TODO add roles
         Map<String, Object> claims = Map.of(
                 "customerId", customerId,
-                "roles", new ArrayList<>()
+                "roles", roles
         );
 
         return Jwts.builder()
