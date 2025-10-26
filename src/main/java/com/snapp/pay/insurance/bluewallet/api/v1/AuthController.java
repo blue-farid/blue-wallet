@@ -1,10 +1,9 @@
 package com.snapp.pay.insurance.bluewallet.api.v1;
 
+import com.snapp.pay.insurance.bluewallet.api.v1.request.LoginOrSignupRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 //TODO we could add a flow for login with password too
 
@@ -19,7 +18,8 @@ public class AuthController {
     }
 
     //TODO login or signup
-    public ResponseEntity<Void> login() {
+    @PostMapping
+    public ResponseEntity<Void> login(@RequestBody LoginOrSignupRequest request) {
         return ResponseEntity.ok().build();
     }
 }

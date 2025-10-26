@@ -3,6 +3,8 @@ package com.snapp.pay.insurance.bluewallet.repository;
 import com.snapp.pay.insurance.bluewallet.domain.Customer;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-public interface CustomerRepository extends JpaRepository<Customer, Long> {
+import java.util.Optional;
 
+public interface CustomerRepository extends JpaRepository<Customer, Long> {
+    Optional<Customer> findByMail(String mail);
 }

@@ -1,7 +1,8 @@
 package com.snapp.pay.insurance.bluewallet.service;
 
-import com.snapp.pay.insurance.bluewallet.api.v1.model.CustomerDto;
+import com.snapp.pay.insurance.bluewallet.api.v1.request.LoginOrSignupRequest;
+import com.snapp.pay.insurance.bluewallet.api.v1.response.LoginOrSignupResponse;
 
 public interface CustomerService {
-    CustomerDto createCustomer(CustomerDto dto);
+    LoginOrSignupResponse login(LoginOrSignupRequest dto);
 }

@@ -4,6 +4,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import lombok.Data;
+import lombok.experimental.Accessors;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
@@ -12,6 +13,7 @@ import java.util.Date;
 @Data
 @Table
 @Entity
+@Accessors(chain = true)
 public class Customer {
     @Id
     private Long id;
