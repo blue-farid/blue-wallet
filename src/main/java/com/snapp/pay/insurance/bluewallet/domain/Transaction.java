@@ -4,8 +4,10 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import lombok.Data;
+import org.hibernate.annotations.CreationTimestamp;
 
 import java.math.BigDecimal;
+import java.util.Date;
 
 //TODO is data dangerous?
 @Data
@@ -18,4 +20,6 @@ public class Transaction {
     private Long toWalletId;
     private BigDecimal amount;
     private TransactionStatus status;
+    @CreationTimestamp
+    private Date createdAt;
 }
