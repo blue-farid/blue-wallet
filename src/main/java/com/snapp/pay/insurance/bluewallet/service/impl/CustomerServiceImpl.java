@@ -16,16 +16,16 @@ public class CustomerServiceImpl implements CustomerService {
     private final CustomerMapper mapper;
 
     @Override
-    public LoginOrSignupResponse login(LoginOrSignupRequest dto) {
+    public LoginOrSignupResponse login(LoginOrSignupRequest request) {
         //TODO validate the otp
-        Customer customer = repository.findByMail(dto.getMail()).orElse(newCustomer(dto));
+        Customer customer = repository.findByMail(request.getMail()).orElse(newCustomer(request));
         //TODO jwt implementation
         return new LoginOrSignupResponse()
                 .setCustomer(mapper.toDto(customer))
                 .setToken("jwt-token");
     }
 
-    private Customer newCustomer(LoginOrSignupRequest dto) {
-        return repository.save(new Customer().setMail(dto.getMail()));
+    private Customer newCustomer(LoginOrSignupRequest request) {
+        return repository.save(new Customer().setMail(request.getMail()));
     }
 }
