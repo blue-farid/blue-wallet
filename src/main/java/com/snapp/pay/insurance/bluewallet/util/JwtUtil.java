@@ -1,10 +1,12 @@
 package com.snapp.pay.insurance.bluewallet.util;
 
+import com.snapp.pay.insurance.bluewallet.config.properties.SecurityProperties;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.security.Keys;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
 import java.security.Key;
@@ -12,17 +14,17 @@ import java.util.Date;
 import java.util.Map;
 
 @Component
+@RequiredArgsConstructor
 public class JwtUtil {
-    private static final String SECRET = "bluewalletsecret";
-    private static final long EXPIRATION_MILLIS = 1000 * 60 * 60 * 24;
+    private final SecurityProperties properties;
 
     private Key getSigningKey() {
-        return Keys.hmacShaKeyFor(SECRET.getBytes());
+        return Keys.hmacShaKeyFor(properties.getJwt().getSecret().getBytes());
     }
 
     public String generateCustomerToken(Long customerId, String mail, String... roles) {
         Date now = new Date();
-        Date expiry = new Date(now.getTime() + EXPIRATION_MILLIS);
+        Date expiry = new Date(now.getTime() + properties.getJwt().getExpiration());
 
         Map<String, Object> claims = Map.of(
                 "customerId", customerId,
@@ -61,6 +63,7 @@ public class JwtUtil {
     public String extractMail(String token) {
         return extractAllClaims(token).getSubject();
     }
+
     public String[] extractRoles(String token) {
         return (String[]) extractAllClaims(token).get("roles");
     }
