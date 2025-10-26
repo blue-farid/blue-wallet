@@ -14,7 +14,6 @@ import org.springframework.web.bind.annotation.*;
 @RequiredArgsConstructor
 public class AuthController {
     private final AuthenticationService customerService;
-    //TODO handle otp with redis and mail
     @GetMapping("/otp")
     public ResponseEntity<Void> getOtp() {
         return ResponseEntity.ok().build();

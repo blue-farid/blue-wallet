@@ -19,7 +19,6 @@ public class Transaction {
     private Long fromWalletId;
     private Long toWalletId;
     private BigDecimal amount;
-    private TransactionStatus status;
     @CreationTimestamp
     private Date createdAt;
 }

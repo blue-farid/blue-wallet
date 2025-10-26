@@ -3,8 +3,8 @@ package com.snapp.pay.insurance.bluewallet.service.impl;
 import com.snapp.pay.insurance.bluewallet.api.v1.request.LoginOrSignupRequest;
 import com.snapp.pay.insurance.bluewallet.api.v1.request.OtpRequest;
 import com.snapp.pay.insurance.bluewallet.api.v1.response.LoginOrSignupResponse;
+import com.snapp.pay.insurance.bluewallet.constant.AuthoritiesConstant;
 import com.snapp.pay.insurance.bluewallet.domain.Customer;
-import com.snapp.pay.insurance.bluewallet.domain.Role;
 import com.snapp.pay.insurance.bluewallet.domain.Wallet;
 import com.snapp.pay.insurance.bluewallet.mapper.CustomerMapper;
 import com.snapp.pay.insurance.bluewallet.repository.CustomerRepository;
@@ -44,7 +44,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         return new LoginOrSignupResponse()
                 .setCustomer(mapper.entityToDto(customer))
                 .setToken(jwtUtil.generateCustomerToken(customer.getId(), customer.getMail(),
-                        Role.CUSTOMER.name()));
+                        AuthoritiesConstant.CUSTOMER));
     }
 
     @Override

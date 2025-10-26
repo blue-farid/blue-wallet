@@ -19,15 +19,16 @@ import java.util.Arrays;
 public class AuthenticationFilter extends OncePerRequestFilter {
     private final JwtUtil jwtUtil;
 
+    // we could add any other object in replace of 'id' as principal.
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
         String token = request.getHeader("Authorization");
 
         if (StringUtils.hasText(token) && jwtUtil.validateToken(token)) {
-            String mail = jwtUtil.extractMail(token);
+            Long id = jwtUtil.extractCustomerId(token);
             String[] roles = jwtUtil.extractRoles(token);
             SecurityContextHolder.getContext().setAuthentication(
-                    new UsernamePasswordAuthenticationToken(mail, null, Arrays.stream(roles)
+                    new UsernamePasswordAuthenticationToken(id, null, Arrays.stream(roles)
                             .map(SimpleGrantedAuthority::new).toList())
             );
         }
