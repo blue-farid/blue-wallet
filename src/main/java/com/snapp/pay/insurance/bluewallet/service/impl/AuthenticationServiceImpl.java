@@ -9,12 +9,14 @@ import com.snapp.pay.insurance.bluewallet.mapper.CustomerMapper;
 import com.snapp.pay.insurance.bluewallet.repository.CustomerRepository;
 import com.snapp.pay.insurance.bluewallet.repository.WalletRepository;
 import com.snapp.pay.insurance.bluewallet.service.AuthenticationService;
+import com.snapp.pay.insurance.bluewallet.util.JwtUtil;
 import com.snapp.pay.insurance.bluewallet.util.MailUtil;
 import com.snapp.pay.insurance.bluewallet.util.RedisUtil;
 import com.snapp.pay.insurance.bluewallet.util.SecurityUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.StringUtils;
 
 @Service
 @RequiredArgsConstructor
@@ -25,16 +27,22 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     private final RedisUtil redisUtil;
     private final SecurityUtil securityUtil;
     private final MailUtil mailUtil;
+    private final JwtUtil jwtUtil;
 
     @Override
     @Transactional
     public LoginOrSignupResponse login(LoginOrSignupRequest request) {
-        //TODO validate the otp
+        String otp = redisUtil.getValue(request.getMail());
+
+        if (!StringUtils.hasText(otp) || !otp.equals(request.getOtp())) {
+            //TODO custom exception
+            throw new RuntimeException();
+        }
+
         Customer customer = customerRepository.findByMail(request.getMail()).orElse(newCustomer(request));
-        //TODO jwt implementation
         return new LoginOrSignupResponse()
                 .setCustomer(mapper.entityToDto(customer))
-                .setToken("jwt-token");
+                .setToken(jwtUtil.generateCustomerToken(customer.getId(), customer.getMail()));
     }
 
     @Override

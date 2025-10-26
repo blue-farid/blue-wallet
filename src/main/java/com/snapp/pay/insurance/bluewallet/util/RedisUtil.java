@@ -14,4 +14,8 @@ public class RedisUtil {
     public void insert(String key, String value) {
         redisTemplate.opsForValue().set(key, value);
     }
+
+    public String getValue(String key) {
+        return redisTemplate.opsForValue().getAndDelete(key);
+    }
 }
