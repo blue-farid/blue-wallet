@@ -1,6 +1,9 @@
 package com.snapp.pay.insurance.bluewallet.service.impl;
 
+import com.snapp.pay.insurance.bluewallet.api.v1.model.TransactionDto;
+import com.snapp.pay.insurance.bluewallet.api.v1.request.GetTransactionsRequest;
 import com.snapp.pay.insurance.bluewallet.api.v1.request.TransactionRequest;
+import com.snapp.pay.insurance.bluewallet.api.v1.response.GetTransactionsResponse;
 import com.snapp.pay.insurance.bluewallet.api.v1.response.TransactionResponse;
 import com.snapp.pay.insurance.bluewallet.domain.Transaction;
 import com.snapp.pay.insurance.bluewallet.domain.Wallet;
@@ -10,6 +13,8 @@ import com.snapp.pay.insurance.bluewallet.repository.TransactionRepository;
 import com.snapp.pay.insurance.bluewallet.repository.WalletRepository;
 import com.snapp.pay.insurance.bluewallet.service.TransactionService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -37,5 +42,15 @@ public class TransactionServiceImpl implements TransactionService {
         return new TransactionResponse()
                 .setTransaction(transactionMapper.toDto(result))
                 .setWallet(walletMapper.toDto(sourceWallet));
+    }
+
+    @Override
+    public GetTransactionsResponse getTransactions(GetTransactionsRequest request, Long customerId, Pageable pageable) {
+        Wallet wallet = walletRepository.findByCustomerId(customerId).orElseThrow();
+        Page<TransactionDto> transactions = transactionRepository
+                .findByFromWalletId(wallet.getId(), pageable)
+                .map(transactionMapper::toDto);
+        return new GetTransactionsResponse()
+                .setTransactions(transactions);
     }
 }
