@@ -1,4 +1,4 @@
-package com.snapp.pay.insurance.bluewallet.controller;
+package com.snapp.pay.insurance.bluewallet.api.v1.controller;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.RequestMapping;
