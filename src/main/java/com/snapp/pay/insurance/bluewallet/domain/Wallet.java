@@ -19,12 +19,16 @@ public class Wallet {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     @NotNull
+    @Column(nullable = false)
     private Long customerId;
     @NotNull
-    private BigDecimal balance = BigDecimal.valueOf(0);
+    @Column(nullable = false)
+    private BigDecimal balance;
     @CreationTimestamp
+    @Column(nullable = false)
     private Date createdAt;
     @UpdateTimestamp
+    @Column(nullable = false)
     private Date updatedAt;
 
     public void decreaseBalance(BigDecimal balance) {

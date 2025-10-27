@@ -13,7 +13,7 @@ import org.springframework.util.StringUtils;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
-import java.util.Arrays;
+import java.util.List;
 
 @RequiredArgsConstructor
 public class AuthenticationFilter extends OncePerRequestFilter {
@@ -26,9 +26,9 @@ public class AuthenticationFilter extends OncePerRequestFilter {
 
         if (StringUtils.hasText(token) && jwtUtil.validateToken(token)) {
             Long id = jwtUtil.extractCustomerId(token);
-            String[] roles = jwtUtil.extractRoles(token);
+            List<String> roles = jwtUtil.extractRoles(token);
             SecurityContextHolder.getContext().setAuthentication(
-                    new UsernamePasswordAuthenticationToken(id, null, Arrays.stream(roles)
+                    new UsernamePasswordAuthenticationToken(id, null, roles.stream()
                             .map(SimpleGrantedAuthority::new).toList())
             );
         }
