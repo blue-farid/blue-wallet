@@ -1,8 +1,6 @@
 package com.snapp.pay.insurance.bluewallet.domain;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.Data;
 import org.hibernate.annotations.CreationTimestamp;
 
@@ -15,6 +13,7 @@ import java.util.Date;
 @Entity
 public class Transaction {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private Long fromWalletId;
     private Long toWalletId;

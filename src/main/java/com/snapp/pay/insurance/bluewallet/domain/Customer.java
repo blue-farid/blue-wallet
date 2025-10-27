@@ -1,8 +1,6 @@
 package com.snapp.pay.insurance.bluewallet.domain;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.Data;
 import lombok.experimental.Accessors;
 import org.hibernate.annotations.CreationTimestamp;
@@ -16,6 +14,7 @@ import java.util.Date;
 @Accessors(chain = true)
 public class Customer {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String mail;
     @CreationTimestamp
