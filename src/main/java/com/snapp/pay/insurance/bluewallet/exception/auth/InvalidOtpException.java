@@ -1,19 +1,19 @@
-package com.snapp.pay.insurance.bluewallet.exception.wallet;
+package com.snapp.pay.insurance.bluewallet.exception.auth;
 
 import com.snapp.pay.insurance.bluewallet.exception.BaseException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
 
-public class MultipleWalletException extends BaseException {
-    public static final String DESC = "exception.customer.not-found";
+public class InvalidOtpException extends BaseException {
+    public static final String DESC = "exception.auth.invalid-otp";
 
-    public MultipleWalletException() {
+    public InvalidOtpException() {
         super(DESC);
     }
 
     @Override
     public HttpStatusCode getStatusCode() {
-        return HttpStatus.BAD_REQUEST;
+        return HttpStatus.FORBIDDEN;
     }
 
     @Override

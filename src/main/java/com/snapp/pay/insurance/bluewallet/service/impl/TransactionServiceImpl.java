@@ -10,6 +10,7 @@ import com.snapp.pay.insurance.bluewallet.api.v1.response.admin.IncreaseBalanceR
 import com.snapp.pay.insurance.bluewallet.domain.Transaction;
 import com.snapp.pay.insurance.bluewallet.domain.TransactionType;
 import com.snapp.pay.insurance.bluewallet.domain.Wallet;
+import com.snapp.pay.insurance.bluewallet.exception.wallet.WalletNotFoundException;
 import com.snapp.pay.insurance.bluewallet.mapper.TransactionMapper;
 import com.snapp.pay.insurance.bluewallet.mapper.WalletMapper;
 import com.snapp.pay.insurance.bluewallet.repository.TransactionRepository;
@@ -35,8 +36,8 @@ public class TransactionServiceImpl implements TransactionService {
     @Override
     @Transactional
     public TransferResponse transfer(TransferRequest request, Long customerId) {
-        Wallet sourceWallet = walletRepository.findByCustomerId(customerId).orElseThrow();
-        Wallet destinationWallet = walletRepository.findById(request.getToWalletId()).orElseThrow();
+        Wallet sourceWallet = walletRepository.findByCustomerId(customerId).orElseThrow(WalletNotFoundException::new);
+        Wallet destinationWallet = walletRepository.findById(request.getToWalletId()).orElseThrow(WalletNotFoundException::new);
         BigDecimal amount = request.getAmount();
         sourceWallet.decreaseBalance(amount);
         destinationWallet.increaseBalance(amount);
@@ -57,7 +58,7 @@ public class TransactionServiceImpl implements TransactionService {
 
     @Override
     public GetTransactionsResponse getTransactions(GetTransactionsRequest request, Long customerId, Pageable pageable) {
-        Wallet wallet = walletRepository.findByCustomerId(customerId).orElseThrow();
+        Wallet wallet = walletRepository.findByCustomerId(customerId).orElseThrow(WalletNotFoundException::new);
         Page<TransactionDto> transactions = transactionRepository
                 .findByWalletId(wallet.getId(), pageable)
                 .map(transactionMapper::toDto);
@@ -68,7 +69,7 @@ public class TransactionServiceImpl implements TransactionService {
     @Override
     @Transactional
     public IncreaseBalanceResponse increaseBalance(IncreaseBalanceRequest request) {
-        Wallet wallet = walletRepository.findByCustomerId(request.getWalletId()).orElseThrow();
+        Wallet wallet = walletRepository.findByCustomerId(request.getWalletId()).orElseThrow(WalletNotFoundException::new);
         Transaction transaction = new Transaction()
                 .setAmount(request.getAmount())
                 .setType(TransactionType.CREDIT)

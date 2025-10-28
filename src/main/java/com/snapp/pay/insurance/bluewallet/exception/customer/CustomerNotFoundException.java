@@ -5,7 +5,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
 
 public class CustomerNotFoundException extends BaseException {
-    public static final String DESC = "exception.customer-not-found";
+    public static final String DESC = "exception.customer.not-found";
 
     public CustomerNotFoundException() {
         super(DESC);

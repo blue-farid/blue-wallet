@@ -4,16 +4,16 @@ import com.snapp.pay.insurance.bluewallet.exception.BaseException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
 
-public class MultipleWalletException extends BaseException {
-    public static final String DESC = "exception.customer.not-found";
+public class WalletNotFoundException extends BaseException {
+    public static final String DESC = "exception.wallet.not-found";
 
-    public MultipleWalletException() {
+    public WalletNotFoundException() {
         super(DESC);
     }
 
     @Override
     public HttpStatusCode getStatusCode() {
-        return HttpStatus.BAD_REQUEST;
+        return HttpStatus.NOT_FOUND;
     }
 
     @Override

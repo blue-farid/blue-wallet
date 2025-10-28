@@ -5,6 +5,7 @@ import com.snapp.pay.insurance.bluewallet.api.v1.response.GetWalletResponse;
 import com.snapp.pay.insurance.bluewallet.api.v1.response.admin.CreateWalletResponse;
 import com.snapp.pay.insurance.bluewallet.exception.customer.CustomerNotFoundException;
 import com.snapp.pay.insurance.bluewallet.exception.wallet.MultipleWalletException;
+import com.snapp.pay.insurance.bluewallet.exception.wallet.WalletNotFoundException;
 import com.snapp.pay.insurance.bluewallet.mapper.WalletMapper;
 import com.snapp.pay.insurance.bluewallet.repository.WalletRepository;
 import com.snapp.pay.insurance.bluewallet.service.WalletService;
@@ -21,7 +22,7 @@ public class WalletServiceImpl implements WalletService {
     public GetWalletResponse getWallet(Long customerId) {
         return new GetWalletResponse()
                 .setWallet(mapper.toDto(repository.findByCustomerId(customerId)
-                        .orElseThrow(CustomerNotFoundException::new)));
+                        .orElseThrow(WalletNotFoundException::new)));
     }
 
     @Override

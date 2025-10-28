@@ -6,6 +6,7 @@ import com.snapp.pay.insurance.bluewallet.api.v1.response.LoginOrSignupResponse;
 import com.snapp.pay.insurance.bluewallet.constant.AuthoritiesConstant;
 import com.snapp.pay.insurance.bluewallet.domain.Customer;
 import com.snapp.pay.insurance.bluewallet.domain.Wallet;
+import com.snapp.pay.insurance.bluewallet.exception.auth.InvalidOtpException;
 import com.snapp.pay.insurance.bluewallet.mapper.CustomerMapper;
 import com.snapp.pay.insurance.bluewallet.repository.CustomerRepository;
 import com.snapp.pay.insurance.bluewallet.repository.WalletRepository;
@@ -38,8 +39,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         String otp = redisUtil.getValue(request.getMail());
 
         if (!StringUtils.hasText(otp) || !otp.equals(request.getOtp())) {
-            //TODO custom exception
-            throw new RuntimeException();
+            throw new InvalidOtpException();
         }
 
         Customer customer = customerRepository.findByMail(request.getMail()).orElse(newCustomer(request));
