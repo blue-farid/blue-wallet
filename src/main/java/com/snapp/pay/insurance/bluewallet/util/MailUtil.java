@@ -2,6 +2,7 @@ package com.snapp.pay.insurance.bluewallet.util;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.scheduling.annotation.Async;
@@ -12,21 +13,22 @@ import org.springframework.stereotype.Component;
 @RequiredArgsConstructor
 public class MailUtil {
     private final JavaMailSender sender;
+    private final MessageSourceUtil messageSourceUtil;
+    @Value("${spring.mail.username}")
+    private String from;
 
     //TODO read subject and body from the messages
     @Async
     public void sendOtp(String mail, String otp) {
-        String subject = "test";
-        String text = "".concat(otp);
-
         SimpleMailMessage message = new SimpleMailMessage();
-        message.setFrom("blue.farid.masjedi@gmail.com");
-        message.setSubject(subject);
-        message.setText(text);
+        message.setFrom(from);
+        message.setSubject(messageSourceUtil.getMessageIfExist("mail.otp.subject"));
+        message.setText(messageSourceUtil.getMessageIfExist("mail.otp.body", otp));
         message.setTo(mail);
 
+        // REMOVE THIS LOG ON PRODUCTION (not even in the debug mode)! Just for the test.
         log.info("otp for {} is {}", mail, otp);
 
-//        sender.send(message);
+        sender.send(message);
     }
 }
