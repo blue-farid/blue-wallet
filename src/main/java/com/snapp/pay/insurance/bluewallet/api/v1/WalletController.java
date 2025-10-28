@@ -1,8 +1,10 @@
 package com.snapp.pay.insurance.bluewallet.api.v1;
 
+import com.snapp.pay.insurance.bluewallet.api.v1.model.ApiResponse;
 import com.snapp.pay.insurance.bluewallet.api.v1.request.admin.CreateWalletRequest;
 import com.snapp.pay.insurance.bluewallet.api.v1.response.GetWalletResponse;
 import com.snapp.pay.insurance.bluewallet.api.v1.response.admin.CreateWalletResponse;
+import com.snapp.pay.insurance.bluewallet.constant.ApiStatus;
 import com.snapp.pay.insurance.bluewallet.service.WalletService;
 import com.snapp.pay.insurance.bluewallet.util.SecurityUtil;
 import lombok.RequiredArgsConstructor;
@@ -22,13 +24,15 @@ public class WalletController {
 
     @Secured(CUSTOMER)
     @GetMapping
-    public ResponseEntity<GetWalletResponse> getWallet() {
-        return ResponseEntity.ok(walletService.getWallet(securityUtil.getCurrentUserId()));
+    public ResponseEntity<ApiResponse<GetWalletResponse>> getWallet() {
+        return ResponseEntity.ok(new ApiResponse<>(ApiStatus.SUCCESS.name(),
+                walletService.getWallet(securityUtil.getCurrentUserId())));
     }
 
     @Secured(ADMIN)
     @PostMapping
-    public ResponseEntity<CreateWalletResponse> createWallet(@RequestBody CreateWalletRequest request) {
-        return ResponseEntity.ok(walletService.createWallet(request));
+    public ResponseEntity<ApiResponse<CreateWalletResponse>> createWallet(@RequestBody CreateWalletRequest request) {
+        return ResponseEntity.ok(new ApiResponse<>(ApiStatus.SUCCESS.name(),
+                walletService.createWallet(request)));
     }
 }
