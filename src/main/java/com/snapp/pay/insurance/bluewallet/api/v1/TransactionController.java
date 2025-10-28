@@ -10,6 +10,7 @@ import com.snapp.pay.insurance.bluewallet.api.v1.response.admin.IncreaseBalanceR
 import com.snapp.pay.insurance.bluewallet.constant.ApiStatus;
 import com.snapp.pay.insurance.bluewallet.service.TransactionService;
 import com.snapp.pay.insurance.bluewallet.util.SecurityUtil;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
@@ -30,21 +31,21 @@ public class TransactionController {
     //TODO add filters
     @Secured(CUSTOMER)
     @GetMapping
-    public ResponseEntity<ApiResponse<GetTransactionsResponse>> getTransactions(GetTransactionsRequest request, @PageableDefault Pageable pageable) {
+    public ResponseEntity<ApiResponse<GetTransactionsResponse>> getTransactions(@Valid GetTransactionsRequest request, @PageableDefault Pageable pageable) {
         return ResponseEntity.ok(new ApiResponse<>(ApiStatus.SUCCESS.name(),
                 transactionService.getTransactions(request, securityUtil.getCurrentUserId(), pageable)));
     }
 
     @Secured(CUSTOMER)
     @PostMapping("/transfers")
-    public ResponseEntity<ApiResponse<TransferResponse>> transaction(@RequestBody TransferRequest request) {
+    public ResponseEntity<ApiResponse<TransferResponse>> transaction(@RequestBody @Valid TransferRequest request) {
         return ResponseEntity.ok(new ApiResponse<>(ApiStatus.SUCCESS.name(),
                 transactionService.transfer(request, securityUtil.getCurrentUserId())));
     }
 
     @Secured(ADMIN)
     @PostMapping
-    public ResponseEntity<ApiResponse<IncreaseBalanceResponse>> increaseBalance(@RequestBody IncreaseBalanceRequest request) {
+    public ResponseEntity<ApiResponse<IncreaseBalanceResponse>> increaseBalance(@RequestBody @Valid IncreaseBalanceRequest request) {
         return ResponseEntity.ok(new ApiResponse<>(ApiStatus.SUCCESS.name(),
                 transactionService.increaseBalance(request)));
     }

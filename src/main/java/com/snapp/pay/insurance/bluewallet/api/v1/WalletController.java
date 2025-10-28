@@ -7,6 +7,7 @@ import com.snapp.pay.insurance.bluewallet.api.v1.response.admin.CreateWalletResp
 import com.snapp.pay.insurance.bluewallet.constant.ApiStatus;
 import com.snapp.pay.insurance.bluewallet.service.WalletService;
 import com.snapp.pay.insurance.bluewallet.util.SecurityUtil;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.annotation.Secured;
@@ -31,7 +32,7 @@ public class WalletController {
 
     @Secured(ADMIN)
     @PostMapping
-    public ResponseEntity<ApiResponse<CreateWalletResponse>> createWallet(@RequestBody CreateWalletRequest request) {
+    public ResponseEntity<ApiResponse<CreateWalletResponse>> createWallet(@RequestBody @Valid CreateWalletRequest request) {
         return ResponseEntity.ok(new ApiResponse<>(ApiStatus.SUCCESS.name(),
                 walletService.createWallet(request)));
     }
