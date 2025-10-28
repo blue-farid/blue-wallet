@@ -1,14 +1,12 @@
 package com.snapp.pay.insurance.bluewallet.exception;
 
-import lombok.Getter;
 import org.springframework.http.HttpStatusCode;
 
-@Getter
-public class BaseException extends RuntimeException {
-    private final HttpStatusCode status;
-
-    public BaseException(String message, HttpStatusCode status) {
+public abstract class BaseException extends RuntimeException {
+    public BaseException(String message) {
         super(message);
-        this.status = status;
     }
+
+    public abstract HttpStatusCode getStatusCode();
+    public abstract String getDescKey();
 }
