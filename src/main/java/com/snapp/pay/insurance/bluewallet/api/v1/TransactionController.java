@@ -1,10 +1,11 @@
 package com.snapp.pay.insurance.bluewallet.api.v1;
 
 import com.snapp.pay.insurance.bluewallet.api.v1.request.GetTransactionsRequest;
-import com.snapp.pay.insurance.bluewallet.api.v1.request.TransactionRequest;
+import com.snapp.pay.insurance.bluewallet.api.v1.request.TransferRequest;
+import com.snapp.pay.insurance.bluewallet.api.v1.request.admin.IncreaseBalanceRequest;
 import com.snapp.pay.insurance.bluewallet.api.v1.response.GetTransactionsResponse;
-import com.snapp.pay.insurance.bluewallet.api.v1.response.TransactionResponse;
-import com.snapp.pay.insurance.bluewallet.constant.AuthoritiesConstant;
+import com.snapp.pay.insurance.bluewallet.api.v1.response.TransferResponse;
+import com.snapp.pay.insurance.bluewallet.api.v1.response.admin.IncreaseBalanceResponse;
 import com.snapp.pay.insurance.bluewallet.service.TransactionService;
 import com.snapp.pay.insurance.bluewallet.util.SecurityUtil;
 import lombok.RequiredArgsConstructor;
@@ -12,11 +13,9 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.annotation.Secured;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
+import static com.snapp.pay.insurance.bluewallet.constant.AuthoritiesConstant.ADMIN;
 import static com.snapp.pay.insurance.bluewallet.constant.AuthoritiesConstant.CUSTOMER;
 
 @RequestMapping("/transactions")
@@ -30,12 +29,18 @@ public class TransactionController {
     @Secured(CUSTOMER)
     @GetMapping
     public ResponseEntity<GetTransactionsResponse> getTransactions(GetTransactionsRequest request, @PageableDefault Pageable pageable) {
-       return ResponseEntity.ok(transactionService.getTransactions(request, securityUtil.getCurrentUserId(), pageable));
+        return ResponseEntity.ok(transactionService.getTransactions(request, securityUtil.getCurrentUserId(), pageable));
     }
 
     @Secured(CUSTOMER)
+    @PostMapping("/transfers")
+    public ResponseEntity<TransferResponse> transaction(@RequestBody TransferRequest request) {
+        return ResponseEntity.ok(transactionService.transfer(request, securityUtil.getCurrentUserId()));
+    }
+
+    @Secured(ADMIN)
     @PostMapping
-    public ResponseEntity<TransactionResponse> transaction(TransactionRequest request) {
-        return ResponseEntity.ok(transactionService.transaction(request));
+    public ResponseEntity<IncreaseBalanceResponse> increaseBalance(@RequestBody IncreaseBalanceRequest request) {
+        return ResponseEntity.ok(transactionService.increaseBalance(request));
     }
 }

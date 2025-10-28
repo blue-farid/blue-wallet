@@ -25,6 +25,9 @@ public class WalletServiceImpl implements WalletService {
 
     @Override
     public CreateWalletResponse createWallet(CreateWalletRequest request) {
+        if (repository.findByCustomerId(request.getWallet().getCustomerId()).isPresent()) {
+            throw new RuntimeException();
+        }
         return new CreateWalletResponse()
                 .setWallet(mapper.toDto(repository
                         .save(mapper.toEntity(request.getWallet()))));

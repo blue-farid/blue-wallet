@@ -2,10 +2,13 @@ package com.snapp.pay.insurance.bluewallet.service.impl;
 
 import com.snapp.pay.insurance.bluewallet.api.v1.model.TransactionDto;
 import com.snapp.pay.insurance.bluewallet.api.v1.request.GetTransactionsRequest;
-import com.snapp.pay.insurance.bluewallet.api.v1.request.TransactionRequest;
+import com.snapp.pay.insurance.bluewallet.api.v1.request.TransferRequest;
+import com.snapp.pay.insurance.bluewallet.api.v1.request.admin.IncreaseBalanceRequest;
 import com.snapp.pay.insurance.bluewallet.api.v1.response.GetTransactionsResponse;
-import com.snapp.pay.insurance.bluewallet.api.v1.response.TransactionResponse;
+import com.snapp.pay.insurance.bluewallet.api.v1.response.TransferResponse;
+import com.snapp.pay.insurance.bluewallet.api.v1.response.admin.IncreaseBalanceResponse;
 import com.snapp.pay.insurance.bluewallet.domain.Transaction;
+import com.snapp.pay.insurance.bluewallet.domain.TransactionType;
 import com.snapp.pay.insurance.bluewallet.domain.Wallet;
 import com.snapp.pay.insurance.bluewallet.mapper.TransactionMapper;
 import com.snapp.pay.insurance.bluewallet.mapper.WalletMapper;
@@ -19,6 +22,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -30,17 +34,24 @@ public class TransactionServiceImpl implements TransactionService {
 
     @Override
     @Transactional
-    public TransactionResponse transaction(TransactionRequest request) {
-        Wallet sourceWallet = walletRepository.findById(request.getTransaction().getFromWalletId()).orElseThrow();
-        Wallet destinationWallet = walletRepository.findById(request.getTransaction().getToWalletId()).orElseThrow();
-        BigDecimal amount = request.getTransaction().getAmount();
+    public TransferResponse transfer(TransferRequest request, Long customerId) {
+        Wallet sourceWallet = walletRepository.findByCustomerId(customerId).orElseThrow();
+        Wallet destinationWallet = walletRepository.findById(request.getToWalletId()).orElseThrow();
+        BigDecimal amount = request.getAmount();
         sourceWallet.decreaseBalance(amount);
         destinationWallet.increaseBalance(amount);
-        Transaction result = transactionRepository.save(transactionMapper.toEntity(request.getTransaction()));
+        Transaction t1 = new Transaction()
+                .setAmount(amount)
+                .setType(TransactionType.CREDIT)
+                .setWalletId(destinationWallet.getId());
+        Transaction t2 = new Transaction()
+                .setAmount(amount)
+                .setType(TransactionType.DEBIT)
+                .setWalletId(sourceWallet.getId());
+        transactionRepository.saveAll(List.of(t1, t2));
         sourceWallet = walletRepository.save(sourceWallet);
         walletRepository.save(destinationWallet);
-        return new TransactionResponse()
-                .setTransaction(transactionMapper.toDto(result))
+        return new TransferResponse()
                 .setWallet(walletMapper.toDto(sourceWallet));
     }
 
@@ -48,9 +59,27 @@ public class TransactionServiceImpl implements TransactionService {
     public GetTransactionsResponse getTransactions(GetTransactionsRequest request, Long customerId, Pageable pageable) {
         Wallet wallet = walletRepository.findByCustomerId(customerId).orElseThrow();
         Page<TransactionDto> transactions = transactionRepository
-                .findByFromWalletId(wallet.getId(), pageable)
+                .findByWalletId(wallet.getId(), pageable)
                 .map(transactionMapper::toDto);
         return new GetTransactionsResponse()
                 .setTransactions(transactions);
+    }
+
+    @Override
+    @Transactional
+    public IncreaseBalanceResponse increaseBalance(IncreaseBalanceRequest request) {
+        Wallet wallet = walletRepository.findByCustomerId(request.getWalletId()).orElseThrow();
+        Transaction transaction = new Transaction()
+                .setAmount(request.getAmount())
+                .setType(TransactionType.CREDIT)
+                .setWalletId(wallet.getId());
+
+        wallet.increaseBalance(request.getAmount());
+
+        transactionRepository.save(transaction);
+        walletRepository.save(wallet);
+
+        return new IncreaseBalanceResponse()
+                .setWallet(walletMapper.toDto(wallet));
     }
 }

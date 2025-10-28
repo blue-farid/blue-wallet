@@ -6,5 +6,5 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface TransactionRepository extends JpaRepository<Transaction, Long> {
-    Page<Transaction> findByFromWalletId(Long fromWalletId, Pageable pageable);
+    Page<Transaction> findByWalletId(Long fromWalletId, Pageable pageable);
 }

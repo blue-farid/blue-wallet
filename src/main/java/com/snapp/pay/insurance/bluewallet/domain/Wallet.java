@@ -1,5 +1,6 @@
 package com.snapp.pay.insurance.bluewallet.domain;
 
+import jakarta.annotation.PostConstruct;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.Data;
@@ -10,6 +11,7 @@ import org.hibernate.annotations.UpdateTimestamp;
 import java.math.BigDecimal;
 import java.util.Date;
 
+//TODO add transactions here? search
 @Data
 @Table
 @Entity
@@ -23,7 +25,7 @@ public class Wallet {
     private Long customerId;
     @NotNull
     @Column(nullable = false)
-    private BigDecimal balance;
+    private BigDecimal balance = BigDecimal.ZERO;
     @CreationTimestamp
     @Column(nullable = false)
     private Date createdAt;
