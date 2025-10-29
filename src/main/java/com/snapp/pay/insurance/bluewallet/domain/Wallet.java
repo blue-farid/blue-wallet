@@ -1,6 +1,5 @@
 package com.snapp.pay.insurance.bluewallet.domain;
 
-import jakarta.annotation.PostConstruct;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.Data;

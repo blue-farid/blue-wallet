@@ -3,7 +3,6 @@ package com.snapp.pay.insurance.bluewallet.service.impl;
 import com.snapp.pay.insurance.bluewallet.api.v1.request.admin.CreateWalletRequest;
 import com.snapp.pay.insurance.bluewallet.api.v1.response.GetWalletResponse;
 import com.snapp.pay.insurance.bluewallet.api.v1.response.admin.CreateWalletResponse;
-import com.snapp.pay.insurance.bluewallet.exception.customer.CustomerNotFoundException;
 import com.snapp.pay.insurance.bluewallet.exception.wallet.MultipleWalletException;
 import com.snapp.pay.insurance.bluewallet.exception.wallet.WalletNotFoundException;
 import com.snapp.pay.insurance.bluewallet.mapper.WalletMapper;

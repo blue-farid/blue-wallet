@@ -33,6 +33,8 @@ public class TransactionServiceImpl implements TransactionService {
     private final TransactionMapper transactionMapper;
     private final WalletMapper walletMapper;
 
+    //TODO transactions parameters
+    //TODO distributed lock - optimistic lock
     @Override
     @Transactional
     public TransferResponse transfer(TransferRequest request, Long customerId) {
@@ -56,7 +58,9 @@ public class TransactionServiceImpl implements TransactionService {
                 .setWallet(walletMapper.toDto(sourceWallet));
     }
 
+    //TODO why read only?
     @Override
+    @Transactional(readOnly = true)
     public GetTransactionsResponse getTransactions(GetTransactionsRequest request, Long customerId, Pageable pageable) {
         Wallet wallet = walletRepository.findByCustomerId(customerId).orElseThrow(WalletNotFoundException::new);
         Page<TransactionDto> transactions = transactionRepository

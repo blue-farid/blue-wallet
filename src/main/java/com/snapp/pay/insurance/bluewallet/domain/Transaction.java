@@ -8,7 +8,9 @@ import org.hibernate.annotations.CreationTimestamp;
 import java.math.BigDecimal;
 import java.util.Date;
 
-//TODO is data dangerous?
+//TODO hibernate search
+//TODO Outbox - Pattern
+//TODO Entity Graph
 @Data
 @Table
 @Entity

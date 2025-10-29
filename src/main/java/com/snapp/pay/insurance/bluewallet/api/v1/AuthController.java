@@ -12,6 +12,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 //TODO we could add a flow for login with password too
+//TODO circuit breaker
+//TODO bulkhead
 
 @RestController
 @RequestMapping("/auth")
@@ -19,12 +21,14 @@ import org.springframework.web.bind.annotation.*;
 public class AuthController {
     private final AuthenticationService authService;
 
+    //TODO Ratelimiter
     @GetMapping("/otp")
     public ResponseEntity<ApiResponse<Void>> getOtp(@Valid OtpRequest request) {
         authService.sendOtp(request);
         return ResponseEntity.ok(new ApiResponse<>(ApiStatus.SUCCESS.name()));
     }
 
+    //TODO Ratelimiter
     @PostMapping
     public ResponseEntity<ApiResponse<LoginOrSignupResponse>> login(@RequestBody @Valid LoginOrSignupRequest request) {
         return ResponseEntity.ok(new ApiResponse<>(ApiStatus.SUCCESS.name(), authService.login(request)));

@@ -5,6 +5,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.Optional;
 
+//TODO cache
 public interface CustomerRepository extends JpaRepository<Customer, Long> {
     Optional<Customer> findByMail(String mail);
 }
