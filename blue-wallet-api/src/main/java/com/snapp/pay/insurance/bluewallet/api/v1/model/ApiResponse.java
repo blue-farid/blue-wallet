@@ -2,11 +2,13 @@ package com.snapp.pay.insurance.bluewallet.api.v1.model;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import lombok.experimental.Accessors;
 
 @Data
 @Accessors(chain = true)
 @AllArgsConstructor
+@NoArgsConstructor
 public class ApiResponse<T> {
     private String status;
     private T data;
