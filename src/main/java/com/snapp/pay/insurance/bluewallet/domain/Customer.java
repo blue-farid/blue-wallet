@@ -8,8 +8,7 @@ import org.hibernate.annotations.UpdateTimestamp;
 
 import java.util.Date;
 
-//TODO Hibernate envers?
-//TODO GDPR
+//TODO GDPR - using converters to encode the customers data.
 @Data
 @Table
 @Entity

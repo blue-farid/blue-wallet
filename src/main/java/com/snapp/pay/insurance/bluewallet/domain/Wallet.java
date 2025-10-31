@@ -10,7 +10,6 @@ import org.hibernate.annotations.UpdateTimestamp;
 import java.math.BigDecimal;
 import java.util.Date;
 
-//TODO add transactions here? search
 @Data
 @Table
 @Entity
