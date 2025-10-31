@@ -4,12 +4,13 @@ import com.snapp.pay.insurance.bluewallet.api.v1.model.ApiResponse;
 import com.snapp.pay.insurance.bluewallet.api.v1.request.LoginOrSignupRequest;
 import com.snapp.pay.insurance.bluewallet.api.v1.request.OtpRequest;
 import com.snapp.pay.insurance.bluewallet.api.v1.response.LoginOrSignupResponse;
+import com.snapp.pay.insurance.bluewallet.domain.Customer;
 import com.snapp.pay.insurance.bluewallet.e2e.BaseE2ETest;
-import com.snapp.pay.insurance.bluewallet.e2e.data.Constants;
+import com.snapp.pay.insurance.bluewallet.e2e.mockdata.Constants;
+import com.snapp.pay.insurance.bluewallet.repository.CustomerRepository;
 import com.snapp.pay.insurance.bluewallet.util.RedisUtil;
 import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.SpyBean;
 import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.core.ParameterizedTypeReference;
@@ -19,10 +20,10 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
 import java.util.Objects;
+import java.util.Optional;
 
 import static org.mockito.Mockito.doReturn;
 
-@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 class AuthenticationE2ETest extends BaseE2ETest {
 
@@ -31,6 +32,8 @@ class AuthenticationE2ETest extends BaseE2ETest {
 
     @SpyBean
     private RedisUtil redisUtil;
+    @Autowired
+    private CustomerRepository repository;
 
     @Test
     @Order(1)
@@ -66,9 +69,13 @@ class AuthenticationE2ETest extends BaseE2ETest {
                 }
         );
 
+        Optional<Customer> customer = repository.findByMail(Constants.FIRST_CUSTOMER_MAIL);
+        Assertions.assertTrue(customer.isPresent());
         Assertions.assertEquals(HttpStatus.OK, response.getStatusCode());
         Assertions.assertEquals("SUCCESS", Objects.requireNonNull(response.getBody()).getStatus());
         Assertions.assertEquals(Constants.FIRST_CUSTOMER_MAIL, response.getBody().getData().getCustomer().getMail());
         Assertions.assertNotNull(response.getBody().getData().getToken());
+        Assertions.assertEquals(Constants.FIRST_CUSTOMER_MAIL, customer.get().getMail());
+
     }
 }
