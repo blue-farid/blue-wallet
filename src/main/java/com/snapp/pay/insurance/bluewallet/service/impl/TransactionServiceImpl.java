@@ -7,9 +7,11 @@ import com.snapp.pay.insurance.bluewallet.api.v1.request.admin.IncreaseBalanceRe
 import com.snapp.pay.insurance.bluewallet.api.v1.response.GetTransactionsResponse;
 import com.snapp.pay.insurance.bluewallet.api.v1.response.TransferResponse;
 import com.snapp.pay.insurance.bluewallet.api.v1.response.admin.IncreaseBalanceResponse;
+import com.snapp.pay.insurance.bluewallet.config.properties.RedissonProperties;
 import com.snapp.pay.insurance.bluewallet.domain.Transaction;
 import com.snapp.pay.insurance.bluewallet.domain.TransactionType;
 import com.snapp.pay.insurance.bluewallet.domain.Wallet;
+import com.snapp.pay.insurance.bluewallet.exception.wallet.WalletLockedException;
 import com.snapp.pay.insurance.bluewallet.exception.wallet.WalletNotFoundException;
 import com.snapp.pay.insurance.bluewallet.mapper.TransactionMapper;
 import com.snapp.pay.insurance.bluewallet.mapper.WalletMapper;
@@ -17,6 +19,8 @@ import com.snapp.pay.insurance.bluewallet.repository.TransactionRepository;
 import com.snapp.pay.insurance.bluewallet.repository.WalletRepository;
 import com.snapp.pay.insurance.bluewallet.service.TransactionService;
 import lombok.RequiredArgsConstructor;
+import org.redisson.api.RLock;
+import org.redisson.api.RedissonClient;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -24,6 +28,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 @Service
 @RequiredArgsConstructor
@@ -32,14 +37,15 @@ public class TransactionServiceImpl implements TransactionService {
     private final WalletRepository walletRepository;
     private final TransactionMapper transactionMapper;
     private final WalletMapper walletMapper;
+    private final RedissonClient redissonClient;
+    private final RedissonProperties redissonProperties;
 
-    //TODO transactions parameters
-    //TODO distributed lock - optimistic lock
+    // I used both redisson lock and jpa lock just for the interview.
     @Override
     @Transactional
     public TransferResponse transfer(TransferRequest request, Long customerId) {
-        Wallet sourceWallet = walletRepository.findByCustomerId(customerId).orElseThrow(WalletNotFoundException::new);
-        Wallet destinationWallet = walletRepository.findById(request.getToWalletId()).orElseThrow(WalletNotFoundException::new);
+        Wallet sourceWallet = walletRepository.findByCustomerIdForUpdate(customerId).orElseThrow(WalletNotFoundException::new);
+        Wallet destinationWallet = walletRepository.findByIdForUpdate(request.getToWalletId()).orElseThrow(WalletNotFoundException::new);
         BigDecimal amount = request.getAmount();
         sourceWallet.decreaseBalance(amount);
         destinationWallet.increaseBalance(amount);
@@ -73,18 +79,39 @@ public class TransactionServiceImpl implements TransactionService {
     @Override
     @Transactional
     public IncreaseBalanceResponse increaseBalance(IncreaseBalanceRequest request) {
-        Wallet wallet = walletRepository.findByCustomerId(request.getWalletId()).orElseThrow(WalletNotFoundException::new);
-        Transaction transaction = new Transaction()
-                .setAmount(request.getAmount())
-                .setType(TransactionType.CREDIT)
-                .setWalletId(wallet.getId());
+        String lockKey = redissonProperties.getLock().getWallet().getKey() + request.getWalletId();
+        RLock lock = redissonClient.getLock(lockKey);
+        boolean locked = false;
+        try {
+            locked = lock.tryLock(redissonProperties.getLock().getWallet().getWaitTime(),
+                    redissonProperties.getLock().getWallet().getLeaseTime(), TimeUnit.SECONDS);
+            if (!locked) {
+                throw new WalletLockedException();
+            }
 
-        wallet.increaseBalance(request.getAmount());
+            Wallet wallet = walletRepository.findByCustomerId(request.getWalletId())
+                    .orElseThrow(WalletNotFoundException::new);
 
-        transactionRepository.save(transaction);
-        walletRepository.save(wallet);
+            wallet.increaseBalance(request.getAmount());
 
-        return new IncreaseBalanceResponse()
-                .setWallet(walletMapper.toDto(wallet));
+            Transaction transaction = new Transaction()
+                    .setWalletId(wallet.getId())
+                    .setAmount(request.getAmount())
+                    .setType(TransactionType.CREDIT);
+
+            transactionRepository.save(transaction);
+            walletRepository.save(wallet);
+
+            return new IncreaseBalanceResponse().setWallet(walletMapper.toDto(wallet));
+
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
+            throw new RuntimeException("Thread interrupted while locking the wallet " + request.getWalletId(), e);
+
+        } finally {
+            if (locked && lock.isHeldByCurrentThread()) {
+                lock.unlock();
+            }
+        }
     }
 }
