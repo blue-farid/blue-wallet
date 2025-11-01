@@ -54,3 +54,17 @@ docker-compose up --build
 
 # Or run locally
 mvn spring-boot:run -Dspring.profiles.active=prod
+```
+
+## Notes for Reviewers
+
+Please consider the following while reviewing the project:
+
+- Some `// TODO` comments and inline comments are intentionally left in the code to highlight areas I planned to refactor or enhance but couldn’t complete due to time constraints.  
+- Unit tests and integration tests are implemented only partially. I’m aware that the number of test scenarios is limited — they were added mainly to demonstrate understanding of test structure and approach.
+---
+
+**Author:** Farid Masjedi  
+Software Engineer @ SnappBox
+
+https://github.com/blue-farid/blue-wallet
