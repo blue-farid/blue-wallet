@@ -1,0 +1,229 @@
+{
+	"info": {
+		"_postman_id": "d0bd8cad-52df-4cc9-b719-77af5965b5a5",
+		"name": "blue-wallet",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "40843733"
+	},
+	"item": [
+		{
+			"name": "otp",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/auth/otp?mail=\"blue.farid.masjedi@gmail.com\"",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"auth",
+						"otp"
+					],
+					"query": [
+						{
+							"key": "mail",
+							"value": "\"blue.farid.masjedi@gmail.com\""
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "login",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"mail\": \"blue.farid.masjedi@gmail.com\",\n    \"otp\": \"643617\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/auth",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"auth"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "get transactions",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "eyJhbGciOiJIUzI1NiJ9.eyJyb2xlcyI6WyJST0xFX0NVU1RPTUVSIl0sImN1c3RvbWVySWQiOjEsInN1YiI6ImJsdWUuZmFyaWQubWFzamVkaUBnbWFpbC5jb20iLCJpYXQiOjE3NjE1NzI3NjcsImV4cCI6MTc2MTU3NjM2N30.sRNYjgqdLej8wjrcZP27sV1QLLWnvtZlh-K8kaxWjnY",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "http://localhost:8080/transactions",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"transactions"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "increase balance - admin",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "eyJhbGciOiJIUzI1NiJ9.eyJyb2xlcyI6WyJST0xFX0FETUlOIl0sImN1c3RvbWVySWQiOjEsInN1YiI6ImJsdWUuZmFyaWQubWFzamVkaUBnbWFpbC5jb20iLCJpYXQiOjE3NjE1NzI3NjcsImV4cCI6MTc2MTU3NjM2N30.yPSbjgO6ORGgvF6w_NbF3ihAsVIGgaycPMvStCFf7QA",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"amount\": 10000\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/transactions",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"transactions"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "create wallet - admin",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "eyJhbGciOiJIUzI1NiJ9.eyJyb2xlcyI6WyJST0xFX0FETUlOIl0sImN1c3RvbWVySWQiOjEsInN1YiI6ImJsdWUuZmFyaWQubWFzamVkaUBnbWFpbC5jb20iLCJpYXQiOjE3NjE1NzI3NjcsImV4cCI6MTc2MTU3NjM2N30.yPSbjgO6ORGgvF6w_NbF3ihAsVIGgaycPMvStCFf7QA",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"wallet\": {\n        \"customerId\": 1\n    }\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/wallets",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"wallets"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "get wallet",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "eyJhbGciOiJIUzI1NiJ9.eyJyb2xlcyI6WyJST0xFX0NVU1RPTUVSIl0sImN1c3RvbWVySWQiOjEsInN1YiI6ImJsdWUuZmFyaWQubWFzamVkaUBnbWFpbC5jb20iLCJpYXQiOjE3NjE1NzI3NjcsImV4cCI6MTc2MTU3NjM2N30.sRNYjgqdLej8wjrcZP27sV1QLLWnvtZlh-K8kaxWjnY",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "http://localhost:8080/wallets",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"wallets"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "transfer",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "eyJhbGciOiJIUzI1NiJ9.eyJyb2xlcyI6WyJST0xFX0NVU1RPTUVSIl0sImN1c3RvbWVySWQiOjEsInN1YiI6ImJsdWUuZmFyaWQubWFzamVkaUBnbWFpbC5jb20iLCJpYXQiOjE3NjE1NzI3NjcsImV4cCI6MTc2MTU3NjM2N30.sRNYjgqdLej8wjrcZP27sV1QLLWnvtZlh-K8kaxWjnY",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"toWalletId\": 2,\n    \"amount\": 10000\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/transactions/transfers",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"transactions",
+						"transfers"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
