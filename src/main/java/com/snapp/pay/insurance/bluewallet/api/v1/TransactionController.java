@@ -21,7 +21,7 @@ import org.springframework.web.bind.annotation.*;
 import static com.snapp.pay.insurance.bluewallet.constant.AuthoritiesConstant.ADMIN;
 import static com.snapp.pay.insurance.bluewallet.constant.AuthoritiesConstant.CUSTOMER;
 
-@RequestMapping("/transactions")
+@RequestMapping("/api/transactions")
 @RestController
 @RequiredArgsConstructor
 public class TransactionController {

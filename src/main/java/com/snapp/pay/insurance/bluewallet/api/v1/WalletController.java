@@ -17,7 +17,7 @@ import static com.snapp.pay.insurance.bluewallet.constant.AuthoritiesConstant.AD
 import static com.snapp.pay.insurance.bluewallet.constant.AuthoritiesConstant.CUSTOMER;
 
 @RestController
-@RequestMapping("/wallets")
+@RequestMapping("/api/wallets")
 @RequiredArgsConstructor
 public class WalletController {
     private final WalletService walletService;

@@ -18,7 +18,7 @@ import org.springframework.web.bind.annotation.*;
 //TODO bulkhead
 
 @RestController
-@RequestMapping("/auth")
+@RequestMapping("/api/auth")
 @RequiredArgsConstructor
 public class AuthController {
     private final AuthenticationService authService;
