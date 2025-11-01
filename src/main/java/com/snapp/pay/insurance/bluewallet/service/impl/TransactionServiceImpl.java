@@ -11,6 +11,7 @@ import com.snapp.pay.insurance.bluewallet.config.properties.RedissonProperties;
 import com.snapp.pay.insurance.bluewallet.domain.Transaction;
 import com.snapp.pay.insurance.bluewallet.domain.TransactionType;
 import com.snapp.pay.insurance.bluewallet.domain.Wallet;
+import com.snapp.pay.insurance.bluewallet.exception.wallet.SelfTransferException;
 import com.snapp.pay.insurance.bluewallet.exception.wallet.WalletLockedException;
 import com.snapp.pay.insurance.bluewallet.exception.wallet.WalletNotFoundException;
 import com.snapp.pay.insurance.bluewallet.mapper.TransactionMapper;
@@ -46,6 +47,9 @@ public class TransactionServiceImpl implements TransactionService {
     public TransferResponse transfer(TransferRequest request, Long customerId) {
         Wallet sourceWallet = walletRepository.findByCustomerIdForUpdate(customerId).orElseThrow(WalletNotFoundException::new);
         Wallet destinationWallet = walletRepository.findByIdForUpdate(request.getToWalletId()).orElseThrow(WalletNotFoundException::new);
+        if (sourceWallet.getId().equals(destinationWallet.getId())) {
+            throw new SelfTransferException();
+        }
         BigDecimal amount = request.getAmount();
         sourceWallet.decreaseBalance(amount);
         destinationWallet.increaseBalance(amount);
