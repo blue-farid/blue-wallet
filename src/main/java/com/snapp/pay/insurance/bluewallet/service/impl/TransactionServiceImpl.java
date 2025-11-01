@@ -68,7 +68,6 @@ public class TransactionServiceImpl implements TransactionService {
                 .setWallet(walletMapper.toDto(sourceWallet));
     }
 
-    //TODO why read only?
     @Override
     @Transactional(readOnly = true)
     public GetTransactionsResponse getTransactions(GetTransactionsRequest request, Long customerId, Pageable pageable) {
