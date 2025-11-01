@@ -50,7 +50,7 @@ The project focuses on reliability, scalability, and concurrency safety using mo
 ### Quick Start
 ```bash
 # Run application
-docker-compose up --build
+docker-compose up -d --build
 
 # Or run locally
 mvn spring-boot:run -Dspring.profiles.active=prod
