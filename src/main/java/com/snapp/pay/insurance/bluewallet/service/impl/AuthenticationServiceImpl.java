@@ -43,6 +43,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         }
 
         Customer customer = customerRepository.findByMail(request.getMail()).orElse(newCustomer(request));
+
         return new LoginOrSignupResponse()
                 .setCustomer(mapper.entityToDto(customer))
                 .setToken(jwtUtil.generateCustomerToken(customer.getId(), customer.getMail(),

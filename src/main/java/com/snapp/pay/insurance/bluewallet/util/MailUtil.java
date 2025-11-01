@@ -17,7 +17,7 @@ public class MailUtil {
     @Value("${spring.mail.username}")
     private String from;
 
-    @Async("virtualThreadExecutor")
+    @Async
     public void sendOtp(String mail, String otp) {
         SimpleMailMessage message = new SimpleMailMessage();
         message.setFrom(from);
