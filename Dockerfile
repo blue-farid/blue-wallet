@@ -4,10 +4,9 @@ WORKDIR /build
 
 COPY .     ./blue-wallet
 
-# remove skip test after adding the tests.
-RUN mvn -B -f blue-wallet/blue-wallet-api/pom.xml clean install -DskipTests
+RUN mvn -B -f blue-wallet/blue-wallet-api/pom.xml clean install dependency:go-offline
 
-RUN mvn -B -f blue-wallet/pom.xml clean package -DskipTests
+RUN mvn -B -f blue-wallet/pom.xml clean package dependency:go-offline
 
 # RUN Stage
 FROM eclipse-temurin:21-jre-alpine

@@ -1,5 +1,6 @@
 package com.snapp.pay.insurance.bluewallet.util;
 
+import com.snapp.pay.insurance.bluewallet.config.properties.RedissonProperties;
 import com.snapp.pay.insurance.bluewallet.config.properties.SecurityProperties;
 import io.github.bucket4j.*;
 import lombok.RequiredArgsConstructor;
@@ -15,6 +16,7 @@ public class RateLimitUtil {
     private final static long TOKENS = 1;
     private final RedissonClient redissonClient;
     private final SecurityProperties securityProperties;
+    private final RedissonProperties redissonProperties;
 
     public boolean isOtpRequestAllowed(String key) {
         return validate(key, securityProperties.getRateLimit().getOtp().getInterval(), securityProperties.getRateLimit().getOtp().getLimit());
@@ -25,7 +27,7 @@ public class RateLimitUtil {
     }
 
     private boolean validate(String key, Integer interval, Integer refillTokensPerMinute) {
-        RBucket<Bucket> bucket = redissonClient.getBucket("ratelimiter:" + key);
+        RBucket<Bucket> bucket = redissonClient.getBucket(redissonProperties.getRateLimiter().getKey() + key);
         Bucket bucketObj = bucket.get();
 
         if (bucketObj == null) {

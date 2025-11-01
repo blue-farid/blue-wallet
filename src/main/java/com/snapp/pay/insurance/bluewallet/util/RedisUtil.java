@@ -11,9 +11,8 @@ import java.time.Duration;
 public class RedisUtil {
     private final StringRedisTemplate redisTemplate;
 
-    //TODO expiry time
     public void insert(String key, String value, Integer minutes) {
-        redisTemplate.opsForValue().set(key, value, Duration.ofMinutes());
+        redisTemplate.opsForValue().set(key, value, Duration.ofMinutes(minutes));
     }
 
     public String getValue(String key) {
