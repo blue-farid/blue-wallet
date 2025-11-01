@@ -58,7 +58,7 @@ mvn spring-boot:run -Dspring.profiles.active=prod
 ## Manual Testing
 
 For manual testing, you can use the Postman collection provided inside the `postman` folder.  
-Simply import the file into your Postman workspace to access preconfigured requests for authentication, wallet operations, and other endpoints.
+Simply import the file into your Postman workspace to access preconfigured requests for endpoints.
 
 ## Notes for Reviewers
 
