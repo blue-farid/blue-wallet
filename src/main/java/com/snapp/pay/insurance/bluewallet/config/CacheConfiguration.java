@@ -17,8 +17,7 @@ public class CacheConfiguration {
     public RedisCacheManager cacheManager(RedisConnectionFactory connectionFactory,
                                           @Value("${blue-wallet.cache.ttl:100}") Integer ttl) {
         RedisCacheConfiguration config = RedisCacheConfiguration.defaultCacheConfig()
-                .entryTtl(Duration.ofMinutes(ttl))
-                .disableCachingNullValues();
+                .entryTtl(Duration.ofMinutes(ttl));
 
         return RedisCacheManager.builder(connectionFactory)
                 .cacheDefaults(config)

@@ -12,17 +12,16 @@ import java.time.Duration;
 @Service
 @RequiredArgsConstructor
 public class RateLimitUtil {
-    private final static long TOKENS = 1;
     private final RedissonClient redissonClient;
     private final SecurityProperties securityProperties;
     private final RedissonProperties redissonProperties;
 
     public boolean isOtpRequestAllowed(String key) {
-        return validate(key, securityProperties.getRateLimit().getOtp().getInterval(), securityProperties.getRateLimit().getOtp().getLimit());
+        return validate(securityProperties.getRateLimit().getOtp().getKey() + key, securityProperties.getRateLimit().getOtp().getInterval(), securityProperties.getRateLimit().getOtp().getLimit());
     }
 
     public boolean isLoginRequestAllowed(String key) {
-        return validate(key, securityProperties.getRateLimit().getLogin().getInterval(), securityProperties.getRateLimit().getLogin().getLimit());
+        return validate(securityProperties.getRateLimit().getLogin().getKey() + key, securityProperties.getRateLimit().getLogin().getInterval(), securityProperties.getRateLimit().getLogin().getLimit());
     }
 
     private boolean validate(String key, Integer interval, Integer limit) {

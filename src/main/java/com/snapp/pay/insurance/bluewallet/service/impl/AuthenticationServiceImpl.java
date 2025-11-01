@@ -21,6 +21,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 
+import java.util.Optional;
+
 @Service
 @RequiredArgsConstructor
 public class AuthenticationServiceImpl implements AuthenticationService {
@@ -42,7 +44,9 @@ public class AuthenticationServiceImpl implements AuthenticationService {
             throw new InvalidOtpException();
         }
 
-        Customer customer = customerRepository.findByMail(request.getMail()).orElse(newCustomer(request));
+        Optional<Customer> optCustomer = customerRepository.findByMail(request.getMail());
+        Customer customer;
+        customer = optCustomer.orElseGet(() -> newCustomer(request));
 
         return new LoginOrSignupResponse()
                 .setCustomer(mapper.entityToDto(customer))

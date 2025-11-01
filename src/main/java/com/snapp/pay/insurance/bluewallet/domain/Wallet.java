@@ -1,5 +1,6 @@
 package com.snapp.pay.insurance.bluewallet.domain;
 
+import com.snapp.pay.insurance.bluewallet.exception.wallet.NotEnoughBalance;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.Data;
@@ -33,6 +34,9 @@ public class Wallet {
 
     public void decreaseBalance(BigDecimal balance) {
         this.balance = this.balance.subtract(balance);
+        if (this.balance.compareTo(BigDecimal.ZERO) < 0) {
+            throw new NotEnoughBalance();
+        }
     }
 
     public void increaseBalance(BigDecimal balance) {

@@ -28,5 +28,6 @@ public class SecurityProperties {
     public static class LimitConfig {
         private Integer interval;
         private Integer limit;
+        private String key;
     }
 }

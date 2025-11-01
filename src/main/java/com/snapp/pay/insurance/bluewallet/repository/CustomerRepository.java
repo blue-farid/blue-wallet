@@ -3,6 +3,7 @@ package com.snapp.pay.insurance.bluewallet.repository;
 import com.snapp.pay.insurance.bluewallet.domain.Customer;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.lang.NonNull;
 
 import java.util.Optional;
 
@@ -11,5 +12,15 @@ public interface CustomerRepository extends JpaRepository<Customer, Long> {
             value = "customer-mail",
             key = "#mail",
             unless = "#result == null"
-    )    Optional<Customer> findByMail(String mail);
+    )
+    Optional<Customer> findByMail(String mail);
+
+    @Cacheable(
+            value = "customer-id",
+            key = "#id",
+            unless = "#result == null"
+    )
+    @NonNull
+    @Override
+    Optional<Customer> findById(@NonNull Long id);
 }
