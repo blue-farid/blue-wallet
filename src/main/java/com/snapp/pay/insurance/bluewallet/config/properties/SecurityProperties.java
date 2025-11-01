@@ -9,10 +9,22 @@ import org.springframework.stereotype.Component;
 @ConfigurationProperties(prefix = "blue-wallet.security")
 public class SecurityProperties {
     private Jwt jwt;
+    private RateLimit rateLimit;
 
     @Data
     public static class Jwt {
         private String secret;
         private Integer expiration;
+    }
+    @Data
+    public static class RateLimit {
+        private LimitConfig otp;
+        private LimitConfig login;
+    }
+
+    @Data
+    public static class LimitConfig {
+        private Integer interval;
+        private Integer limit;
     }
 }
