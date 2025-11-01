@@ -3,6 +3,7 @@ package com.snapp.pay.insurance.bluewallet.service.impl;
 import com.snapp.pay.insurance.bluewallet.api.v1.request.LoginOrSignupRequest;
 import com.snapp.pay.insurance.bluewallet.api.v1.request.OtpRequest;
 import com.snapp.pay.insurance.bluewallet.api.v1.response.LoginOrSignupResponse;
+import com.snapp.pay.insurance.bluewallet.config.properties.SecurityProperties;
 import com.snapp.pay.insurance.bluewallet.constant.AuthoritiesConstant;
 import com.snapp.pay.insurance.bluewallet.domain.Customer;
 import com.snapp.pay.insurance.bluewallet.domain.Wallet;
@@ -30,6 +31,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     private final SecurityUtil securityUtil;
     private final MailUtil mailUtil;
     private final JwtUtil jwtUtil;
+    private final SecurityProperties securityProperties;
 
     @Override
     @Transactional
@@ -50,7 +52,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     @Override
     public void sendOtp(OtpRequest request) {
         String otp = securityUtil.generateOtp();
-        redisUtil.insert(request.getMail(), otp);
+        redisUtil.insert(request.getMail(), otp, securityProperties.getOtpExpiration());
         mailUtil.sendOtp(request.getMail(), otp);
     }
 

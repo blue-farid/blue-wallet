@@ -10,12 +10,14 @@ import org.springframework.stereotype.Component;
 public class SecurityProperties {
     private Jwt jwt;
     private RateLimit rateLimit;
+    private Integer otpExpiration;
 
     @Data
     public static class Jwt {
         private String secret;
         private Integer expiration;
     }
+
     @Data
     public static class RateLimit {
         private LimitConfig otp;
