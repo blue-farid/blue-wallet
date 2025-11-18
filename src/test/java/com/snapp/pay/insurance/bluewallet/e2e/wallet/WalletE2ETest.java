@@ -54,7 +54,7 @@ public class WalletE2ETest extends BaseE2ETest {
                                 .setBalance(Constants.FIRST_CUSTOMER_BALANCE)
                                 .setCustomerId(1L)
                 );
-        ResponseEntity<ApiResponse<CreateWalletResponse>> res = rest.exchange("/wallets",
+        ResponseEntity<ApiResponse<CreateWalletResponse>> res = rest.exchange("/api/wallets",
                 HttpMethod.POST,
                 new HttpEntity<>(req, new HttpHeaders(httpHeaders)),
                 new ParameterizedTypeReference<>() {
@@ -71,7 +71,7 @@ public class WalletE2ETest extends BaseE2ETest {
     void shouldGetWalletByCustomer() {
         HttpHeaders headers = new HttpHeaders();
         headers.set("Authorization", jwtUtil.generateCustomerToken(1L, Constants.FIRST_CUSTOMER_MAIL, AuthoritiesConstant.CUSTOMER));
-        ResponseEntity<ApiResponse<GetWalletResponse>> res = rest.exchange("/wallets",
+        ResponseEntity<ApiResponse<GetWalletResponse>> res = rest.exchange("/api/wallets",
                 HttpMethod.GET,
                 new HttpEntity<>(headers),
                 new ParameterizedTypeReference<>() {

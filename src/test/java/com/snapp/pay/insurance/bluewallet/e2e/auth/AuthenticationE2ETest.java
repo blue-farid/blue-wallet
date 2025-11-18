@@ -41,7 +41,7 @@ class AuthenticationE2ETest extends BaseE2ETest {
         OtpRequest request = new OtpRequest()
                 .setMail(Constants.FIRST_CUSTOMER_MAIL);
         ResponseEntity<ApiResponse<Void>> response =
-                rest.exchange("/auth/otp?mail=" + request.getMail(),
+                rest.exchange("/api/auth/otp?mail=" + request.getMail(),
                         HttpMethod.GET,
                         null,
                         new ParameterizedTypeReference<>() {
@@ -62,7 +62,7 @@ class AuthenticationE2ETest extends BaseE2ETest {
                 .setOtp(otp);
         HttpEntity<LoginOrSignupRequest> entity = new HttpEntity<>(request);
         ResponseEntity<ApiResponse<LoginOrSignupResponse>> response = rest.exchange(
-                "/auth",
+                "/api/auth",
                 HttpMethod.POST,
                 entity,
                 new ParameterizedTypeReference<>() {
